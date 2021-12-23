@@ -13,41 +13,34 @@ public class collision : MonoBehaviour
     public bool IsHiderNear() 
     {
     	float dist = Vector3.Distance(hider.transform.position, transform.position);
-    	if (dist < max_dist_to_hiden) {
-    		Debug.Log("distance");
+    	if (dist < max_dist_to_hiden)
     		return true;
-
-    	}
-    	return false;
+    	else
+    		return false;
     }
     public bool IsHidenInFOV() 
     {
     	Vector3 targetdir = hider.transform.position - transform.position;
     	Vector3 forward = transform.forward;
     	float angle = Vector3.Angle(targetdir, forward);
-    	if (angle < seekerFOV)
-    	{
-    		Debug.Log("FOV");
+    	if (angle < seekerFOV)    		
     		return true;
-    	}
-    	else return false;
+    	else 
+    		return false;
     }
 
     public bool IshiderSeen() 
     {
     	Vector3 direction = (hider.transform.position - transform.position).normalized;
-    	if(Physics.Raycast(transform.position, direction, out hit, max_dist_to_hiden) && hit.collider.gameObject == hider)
-    	{
-    		Debug.Log("seee you!");
+    	if(Physics.Raycast(transform.position, direction, out hit, max_dist_to_hiden) && hit.collider.gameObject == hider)  
     		return true;
-    	}
     	else
     		return false;
     }
 
     void Update () {
-    	if (IsHiderNear() && IsHidenInFOV())
-    		IshiderSeen();
+    	if (IsHiderNear() && IsHidenInFOV() && IshiderSeen())
+    		Debug.Log("See YOU!");
     		
     }
 }
