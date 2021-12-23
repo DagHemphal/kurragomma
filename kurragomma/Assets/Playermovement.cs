@@ -8,6 +8,7 @@ public class Playermovement : MonoBehaviour
     public float speed = 6f;
     public float turnSmoothTime = 0.1f;
     public float gravity = -9.81f;
+    public bool grabing = false;
 
     float turnSmoothVelocity; 
 
@@ -22,7 +23,9 @@ public class Playermovement : MonoBehaviour
 
     	if (direction.magnitude >= 0.1f)
     	{
-    		float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+    		float targetAngle = (Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg);
+            if (grabing)
+                targetAngle += 180;
     		float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
     		transform.rotation = Quaternion.Euler(0f, angle, 0f);
     		controller.Move(direction * speed * Time.deltaTime);

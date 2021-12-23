@@ -845,7 +845,8 @@ MonoBehaviour:
   controller: {fileID: 886600907}
   speed: 6
   turnSmoothTime: 0.1
-  gravity: -9.81
+  gravity: -4.81
+  grabing: 0
 --- !u!143 &886600907
 CharacterController:
   m_ObjectHideFlags: 0
@@ -893,6 +894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hider: {fileID: 2023503106}
+  triangle: {fileID: 541851985}
   max_dist_to_hiden: 5.5
   seekerFOV: 40
 --- !u!1 &954789001
@@ -2055,7 +2057,6 @@ GameObject:
   - component: {fileID: 2023503109}
   - component: {fileID: 2023503108}
   - component: {fileID: 2023503107}
-  - component: {fileID: 2023503110}
   m_Layer: 0
   m_Name: Hider
   m_TagString: Untagged
@@ -2078,7 +2079,8 @@ MonoBehaviour:
   controller: {fileID: 2023503108}
   speed: 6
   turnSmoothTime: 0.1
-  gravity: -9.81
+  gravity: -2.81
+  grabing: 0
 --- !u!143 &2023503108
 CharacterController:
   m_ObjectHideFlags: 0
@@ -2112,16 +2114,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &2023503110
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2023503106}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.112247, y: 2.7868793, z: 1.3112473}
-  m_Center: {x: -0.2254241, y: -0.6133486, z: -0.15562367}
