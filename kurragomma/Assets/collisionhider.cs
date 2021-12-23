@@ -1,16 +1,14 @@
 using UnityEngine;
 
-public class collision : MonoBehaviour
+public class collisionhider : MonoBehaviour
 {
     public GameObject obj;
     public float max_dist_to_obj = 5.5f;
     public float seekerFOV = 40f;
-    public won Won;
-    public grab Grab;
 
     RaycastHit hit;
 
-    public bool IsHiderNear() 
+    public bool IsObjNear() 
     {
     	float dist = Vector3.Distance(obj.transform.position, transform.position);
     	if (dist < max_dist_to_obj)
@@ -18,7 +16,7 @@ public class collision : MonoBehaviour
     	else
     		return false;
     }
-    public bool IsHidenInFOV() 
+    public bool IsObjInFOV() 
     {
     	Vector3 targetdir = obj.transform.position - transform.position;
     	Vector3 forward = transform.forward;
@@ -29,7 +27,7 @@ public class collision : MonoBehaviour
     		return false;
     }
 
-    public bool IshiderSeen() 
+    public bool IsObjSeen() 
     {
     	Vector3 direction = (obj.transform.position - transform.position).normalized;
     	if(Physics.Raycast(transform.position, direction, out hit, max_dist_to_obj) && hit.collider.gameObject == obj)  
@@ -39,13 +37,10 @@ public class collision : MonoBehaviour
     }
 
     void Update () {
-    	if (IsHiderNear() && IsHidenInFOV() && IshiderSeen()) {
-
-    		if (obj.name == "triangle")
-    			Grab.run();
-    		else if(obj.name == "Hider")
-    			Won.run();
+    	if (IsObjNear() && IsObjInFOV() && IsObjSeen()) {
+    		Debug.Log("Found YOU!");
     	}
     		
     }
 }
+
