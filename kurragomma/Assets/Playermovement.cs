@@ -7,7 +7,11 @@ public class Playermovement : MonoBehaviour
     public CharacterController controller;
     public float speed = 6f;
     public float turnSmoothTime = 0.1f;
+    public float gravity = -9.81f;
+
     float turnSmoothVelocity; 
+
+    Vector3 velocity;
 
     // Update is called once per frame
     void Update()
@@ -23,5 +27,9 @@ public class Playermovement : MonoBehaviour
     		transform.rotation = Quaternion.Euler(0f, angle, 0f);
     		controller.Move(direction * speed * Time.deltaTime);
     	}
+
+        velocity.y += gravity * Time.deltaTime;
+
+        controller.Move(velocity * Time.deltaTime);
     }
 }
