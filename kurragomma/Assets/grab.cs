@@ -8,9 +8,6 @@ public class grab : MonoBehaviour
     public bool picked = false;
 
 
-    private Vector3 dist;
-
-
     RaycastHit hit;
 
     public bool IsObjNear() 
@@ -41,31 +38,40 @@ public class grab : MonoBehaviour
     		return false;
     }
 
+    Rigidbody trirb;
+    public float forcepush = 1f;
+    private CharacterController controller;
+
+    void Start() 
+    {
+    	trirb = obj.GetComponent<Rigidbody>();
+        controller = GetComponent<CharacterController>();
+    }
+
+
     void Update () 
     {
     	if (IsObjNear() && IsObjInFOV() && IsObjSeen()) 
     	{
     		if (Input.GetButtonDown("Fire1")) 
     		{
-    			dist = obj.transform.position - transform.position;
 	    		if (picked) {
-	    			GetComponent<Playermovement>().grabing = false;
+	    			//GetComponent<Playermovement>().grabing = false;
 	    			picked = false;
 	    		}
 	    		else {
-	    			GetComponent<Playermovement>().grabing = true;
+	    			//GetComponent<Playermovement>().grabing = true;
 	    			picked = true;
 	    		}
     		}
     	}
     	if (picked) 
-    	{
-    		Debug.Log("picked!");
-    		float mag = dist.magnitude;
-    		if (mag < 1.5f)
-    			mag = 1.5f;
-	    	obj.transform.position = (mag*transform.forward) + transform.position;
+    	{  
+
+            Vector3 horizontalVelocity = controller.velocity;
+    		trirb.AddForce(horizontalVelocity);
     	}
+        //Debug.Log(controller.velocity);
     		
     }
     	

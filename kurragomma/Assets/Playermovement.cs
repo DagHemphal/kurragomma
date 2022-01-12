@@ -4,15 +4,20 @@ public class Playermovement : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    public CharacterController controller;
+    
     public float speed = 6f;
     public float turnSmoothTime = 0.1f;
     public float gravity = -9.81f;
     public bool grabing = false;
 
-    float turnSmoothVelocity; 
+    private float turnSmoothVelocity; 
+    private CharacterController controller;
+    private Vector3 velocity;
 
-    Vector3 velocity;
+    void Start()
+    {
+        controller = GetComponent<CharacterController>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -31,8 +36,13 @@ public class Playermovement : MonoBehaviour
     		controller.Move(direction * speed * Time.deltaTime);
     	}
 
+        
         velocity.y += gravity * Time.deltaTime;
-
+        //Debug.Log(controller.velocity);
         controller.Move(velocity * Time.deltaTime);
+
+
+
+        
     }
 }
