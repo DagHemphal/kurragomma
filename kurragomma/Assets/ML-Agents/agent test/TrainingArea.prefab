@@ -229,8 +229,6 @@ MonoBehaviour:
   MaxStep: 0
   counter: 5
   seeker: {fileID: 3208681851418029238}
-  max_dist_to_target: 4
-  seekerFOV: 40
   forceMultiplier: 18
 --- !u!114 &1109216678607872031
 MonoBehaviour:
@@ -245,7 +243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 6
+    VectorObservationSize: 7
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -256,7 +254,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 3
-  m_BehaviorType: 0
+  m_BehaviorType: 1
   m_BehaviorName: Targetcube
   TeamId: 0
   m_UseChildSensors: 1
@@ -446,8 +444,10 @@ MonoBehaviour:
   MaxStep: 0
   hider: {fileID: 3208681850677075174}
   wall: {fileID: 5388777288815106199}
+  counter_reset: 10
   max_dist_to_target: 4
   seekerFOV: 40
+  paused: 1
   forceMultiplier: 15
 --- !u!114 &3208681851418029237
 MonoBehaviour:
@@ -476,7 +476,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 5
+    VectorObservationSize: 7
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -485,9 +485,9 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 0030f2a3109f7df42a4392416ee2f41b, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 3
-  m_BehaviorType: 0
+  m_BehaviorType: 1
   m_BehaviorName: Agentcube
   TeamId: 0
   m_UseChildSensors: 1

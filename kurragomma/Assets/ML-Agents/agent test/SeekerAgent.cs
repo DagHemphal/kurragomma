@@ -6,18 +6,23 @@ using Unity.MLAgents.Actuators;
 
 public class SeekerAgent : Agent
 {
-    Rigidbody rBody;
-    void Start()
-    {
-        rBody = GetComponent<Rigidbody>();
-    }
 
     public GameObject hider;
     public GameObject wall;
+    public float counter_reset = 10f;
     public float max_dist_to_target = 4f;
     public float seekerFOV = 40f;
+    public bool paused = true;
 
     RaycastHit hit;
+    Rigidbody rBody;
+    HiderAgent hider_script;
+
+    void Start()
+    {
+        rBody = GetComponent<Rigidbody>();
+        hider_script = hider.GetComponent<HiderAgent>();
+    }
 
     public bool IsTargetNear(GameObject target) 
     {
@@ -54,64 +59,60 @@ public class SeekerAgent : Agent
     //Körs varjegång agenten hittar hider
     public override void OnEpisodeBegin()
     {
-
-        // If the Agent fell, zero its momentum
-        if (this.transform.localPosition.y < 0)
-        {
-            this.rBody.angularVelocity = Vector3.zero;
-            this.rBody.velocity = Vector3.zero;
-            this.transform.localPosition = new Vector3( 0, 0.5f, 0);
-        }
-
-        
-
+        //set paus
+        paused = true;
+        //Flytta till start position
+        transform.localPosition = new Vector3(0f, 0.5f, 0f);
     }
 
     //indata för miljön
     public override void CollectObservations(VectorSensor sensor)
     {
-        // Target and Agent positions
+        // Target och Agent positions
         sensor.AddObservation(this.transform.localPosition);
         sensor.AddObservation(TargetFound(hider));
         sensor.AddObservation(TargetFound(wall));
+        sensor.AddObservation(paused); //not really needed
+        sensor.AddObservation(hider_script.counter);
     }
 
     private float turnSmoothVelocity;
     public float forceMultiplier = 10;
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        // Actions, size = 2
-        float horizontal = actionBuffers.ContinuousActions[0];
-        float vertical = actionBuffers.ContinuousActions[1];
-        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
+        //väntar tills hider har gömt sig
+        if (!paused) {
+            // Actions, size = 2
+            float horizontal = actionBuffers.ContinuousActions[0];
+            float vertical = actionBuffers.ContinuousActions[1];
+            Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
 
-        if (direction.magnitude >= 0.1f)
-        {
-            float targetAngle = (Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg);
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, 0.1f);
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
-            rBody.AddForce(direction * forceMultiplier);
+            if (direction.magnitude >= 0.1f)
+            {
+                float targetAngle = (Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg);
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, 0.1f);
+                transform.rotation = Quaternion.Euler(0f, angle, 0f);
+                rBody.AddForce(direction * forceMultiplier);
+            }
+            
+            // Reached hider
+            if (TargetFound(hider)) {
+
+                //hider agent reward and variable set
+                hider_script.counter = counter_reset;
+                hider_script.SetReward(-1.0f);
+            
+                //this agent reward set
+                SetReward(1.0f);
+
+                //end both episdoes
+                hider_script.EndEpisode();
+                EndEpisode();
+            }
+            else
+                SetReward(-0.1f);
         }
-
-        // Rewards
-        // Reached hider
-        if (TargetFound(hider)) {
-            SetReward(1.0f);
-
-            //Flytta hider till start position
-            hider.transform.localPosition = new Vector3(3f, 0.5f, 4f);
-            transform.localPosition = new Vector3(0f, 0.5f, 0f);
-            EndEpisode();
-        }
-        // Fell off platform
-        else if (this.transform.localPosition.y < 0)
-        {
-            SetReward(-0.2f);
-            EndEpisode();
-        }
-        else
-            SetReward(-0.1f);
 
     }
 
